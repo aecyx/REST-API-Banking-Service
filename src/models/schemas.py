@@ -25,3 +25,22 @@ class PaginatedAccounts(BaseModel):
     total: int
     limit: int
     offset: int
+
+class DepositRequest(BaseModel):
+    amount: float = Field(..., gt=0.0)
+
+class WithdrawalRequest(BaseModel):
+    amount: float = Field(..., gt=0.0)
+
+class TransferRequest(BaseModel):
+    source_account_id: str
+    target_account_id: str
+    amount: float = Field(..., gt=0.0)
+
+class TransactionResponse(BaseModel):
+    id: str
+    account_id: str
+    transaction_type: str
+    amount: float
+    new_balance: float
+    timestamp: datetime

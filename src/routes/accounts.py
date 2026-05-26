@@ -1,5 +1,6 @@
 import src.database.queries as queries
 import src.models.schemas as schemas
+import src.exceptions as exceptions
 from fastapi import APIRouter, HTTPException
 from src.database.connection import get_db_connection
 
@@ -28,10 +29,11 @@ def list_accounts(limit: int = 10, offset: int = 0):
 @router.put("/{account_id}", response_model=schemas.AccountResponse)
 def update_account(account_id: str, update_data: schemas.AccountUpdate):
     with get_db_connection() as db:
-        account = queries.get_account_by_id(db, account_id)
-        if not account:
+        try:
+            queries.update_account(db, account_id, update_data)
+        except exceptions.AccountNotFoundException:
             raise HTTPException(status_code=404, detail="Account not found")
-        if not queries.update_account(db, account_id, update_data):
+        except exceptions.NoFieldsToUpdateException:
             raise HTTPException(status_code=400, detail="No fields to update")
         account = queries.get_account_by_id(db, account_id)
         return account

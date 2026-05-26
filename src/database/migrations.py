@@ -13,3 +13,13 @@ def run_migrations():
                 updated_at      TEXT NOT NULL
             );
         """)
+        db.execute("""
+            CREATE TABLE IF NOT EXISTS transactions (
+                   id               TEXT PRIMARY KEY,
+                   account_id       TEXT NOT NULL,
+                   transaction_type TEXT NOT NULL CHECK(transaction_type IN ('deposit', 'withdrawal', 'transfer_in', 'transfer_out')),
+                   amount           REAL NOT NULL,
+                   new_balance      REAL NOT NULL,
+                   timestamp        TEXT NOT NULL
+            );
+        """)

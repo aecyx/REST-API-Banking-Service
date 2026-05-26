@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from src.database.migrations import run_migrations
-from src.routes import accounts
+from src.routes import accounts, transactions, transfers
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -15,3 +15,5 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 app.include_router(accounts.router)
+app.include_router(transactions.router)
+app.include_router(transfers.router)
